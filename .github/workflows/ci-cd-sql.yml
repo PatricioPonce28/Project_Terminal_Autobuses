@@ -1,5 +1,4 @@
-name: CI/CD for SQL Scripts
-
+name: CI-CD-for-SQL-Scripts
 on:
   push:
     branches:
@@ -11,7 +10,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     services:
       mysql:
         image: mysql:8.0
@@ -25,15 +23,12 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
       - name: List files in repository
         run: |
-          ls -R # Listar los archivos recursivamente
-
+          ls -R
       - name: Wait for MySQL to be ready
         run: |
           for i in {30..0}; do
@@ -48,7 +43,6 @@ jobs:
             echo 'MySQL did not become available in time' >&2
             exit 1
           fi
-
       - name: Run SQL scripts
         run: |
           docker exec mysql-container mysql -u root -proot -e "CREATE DATABASE test_db;"
@@ -60,7 +54,6 @@ jobs:
           docker exec -i mysql-container mysql -u root -proot test_db < "Scripts/Procedimientos Almacenados/Vistas_Terminal_Buses.sql"
           docker exec -i mysql-container mysql -u root -proot test_db < Scripts/Seguridad/cifrado_datos.sql
           docker exec -i mysql-container mysql -u root -proot test_db < Scripts/Seguridad/crear_roles.sql
-
       - name: Run SQL tests (skip this if you don't have the test script)
         run: |
           # Si no tienes el script de prueba, esta línea puede ser comentada o eliminada
