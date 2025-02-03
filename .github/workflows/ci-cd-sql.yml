@@ -17,4 +17,14 @@ jobs:
       - name: Run SQL scripts
         run: |
           docker exec mysql-container mysql -u root -proot -e "CREATE DATABASE test_db;"
-          # Agrega tus comandos SQL aquí
+          name: Run SQL scripts
+        run: |
+          docker exec mysql-container mysql -u root -proot -e "CREATE DATABASE test_db;"
+          docker exec -i mysql-container mysql -u root -proot test_db < Scripts/Tablas_Terminal_Buses.sql
+          docker exec -i mysql-container mysql -u root -proot test_db < Scripts/Ingresos_terminal_buses.sql
+          docker exec -i mysql-container mysql -u root -proot test_db < Scripts/Auditoria/activar_auditoria.sql
+          docker exec -i mysql-container mysql -u root -proot test_db < "Scripts/Procedimientos Almacenados/Procedure_Terminal_Buses.sql"
+          docker exec -i mysql-container mysql -u root -proot test_db < "Scripts/Procedimientos Almacenados/Triggers_Terminal_Buses.sql"
+          docker exec -i mysql-container mysql -u root -proot test_db < "Scripts/Procedimientos Almacenados/Vistas_Terminal_Buses.sql"
+          docker exec -i mysql-container mysql -u root -proot test_db < Scripts/Seguridad/cifrado_datos.sql
+          docker exec -i mysql-container mysql -u root -proot test_db < Scripts/Seguridad/crear_roles.sql
