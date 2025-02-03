@@ -32,14 +32,16 @@ jobs:
       # Paso 2: Esperar hasta que el contenedor de MySQL esté disponible
       - name: Wait for MySQL to be ready
         run: |
-          for i in {30..0}; do
+          echo "Waiting for MySQL to be ready..."
+          for i in {1..30}; do
             if docker exec mysql mysqladmin ping --silent; then
+              echo "MySQL is up and running!"
               break
             fi
             echo 'MySQL is unavailable - sleeping'
-            sleep 1
+            sleep 5
           done
-          if [ "$i" = 0 ]; then
+          if [ "$i" = 30 ]; then
             echo 'MySQL did not become available in time' >&2
             exit 1
           fi
@@ -60,3 +62,4 @@ jobs:
           docker exec -i mysql mysql -u root -proot test_db < Scripts/Procedimientos\ Almacenados/Vistas_Terminal_Buses.sql
           docker exec -i mysql mysql -u root -proot test_db < Scripts/Seguridad/cifrado_datos.sql
           docker exec -i mysql mysql -u root -proot test_db < Scripts/Seguridad/crear_roles.sql
+
