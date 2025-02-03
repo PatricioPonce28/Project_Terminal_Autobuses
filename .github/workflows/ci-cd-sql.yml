@@ -64,3 +64,4 @@ jobs:
       - name: Run SQL tests
         run: |
           docker exec mysql-container mysql -u root -proot test_db -e "source Scripts/test_script.sql;"
+
