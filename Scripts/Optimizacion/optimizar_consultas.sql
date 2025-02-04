@@ -1,3 +1,25 @@
+-- detectar consultas lentas
+SHOW PROCESSLIST;
+
+EXPLAIN SELECT * FROM Viajes WHERE ciudad_salida = 'Bogotá';
+-- alterar las que considere innecesarias 
+ALTER TABLE Viajes DROP INDEX idx_ciudad_salida ;
+ALTER TABLE Viajes ADD INDEX idx_ciudad_salida (ciudad_salida);
+-- en caso de que las consultas sean lentas por MYSQL verificar con:
+SHOW VARIABLES LIKE 'key_buffer_size';
+SHOW VARIABLES LIKE 'query_cache_size';
+
+SET GLOBAL slow_query_log = 'ON';
+SET GLOBAL long_query_time = 2;  -- Umbral de 2 segundos para consultas lentas
+-- monitorear las consultas 
+SELECT * FROM mysql.slow_log WHERE start_time >= '2025-02-01';
+SHOW STATUS LIKE 'Queries';
+SHOW VARIABLES LIKE 'slow_query_log';
+-- path de donde se guardan las consultas lentas
+SHOW VARIABLES LIKE 'slow_query_log_file';
+
+
+
 -- Monitoreo de índices existentes
 SHOW INDEX FROM Personas;
 SHOW INDEX FROM Pagos;
